@@ -1,0 +1,36 @@
+Package: brmsINLApower
+Title: Bayesian Power Analysis with 'brms' and 'INLA'
+Version: 0.0.0.9000
+Authors@R: 
+    person("Tony", "Myers",
+           email = "admyers@aol.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0003-4516-4829"))
+Description: Tools for Bayesian power analysis and assurance 
+    calculations using the 'brms' and 'INLA' frameworks. 
+    Includes functions for simulation-based and analytical 
+    approaches, sequential and two-stage designs, as well as 
+    visualisation helpers for power curves, assurance, and 
+    robustness analyses.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    stats,
+    utils,
+    ggplot2,
+    dplyr,
+    tibble,
+    scales,
+    rlang,
+    magrittr,
+    MASS,
+    INLA
+Suggests:
+    Hmisc,
+    sn,
+    circular,
+    viridisLite,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

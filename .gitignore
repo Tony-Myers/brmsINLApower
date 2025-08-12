@@ -1,0 +1,25 @@
+# R and RStudio
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+
+# OS files
+.DS_Store
+.Trash
+.idea
+.vscode
+Thumbs.db
+
+# Package build artifacts
+.Rbuildignore
+*.tar.gz
+*.Rcheck/
+
+# pkgdown site
+docs
+_pkgdown.yml
+
+# Optional dev files for CRAN
+README.Rmd
