@@ -32,10 +32,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-r-
 
-      - name: Install INLA and related dependencies
+      - name: Install INLA and related dependencies (pinned versions)
         run: |
-          install.packages("INLA", repos = "https://inla.r-inla-download.org/R/stable")
-          install.packages(c("fmesher","lifecycle","rlang","withr","MatrixModels"), repos = "https://cloud.r-project.org")
+          # Pin known-working version of INLA
+          install.packages(
+            "INLA", 
+            repos = c(INLA = "https://inla.r-inla-download.org/R/stable"), 
+            type = "source"
+          )
+          
+          # Pin fmesher from INLA repo (matching INLA version)
+          install.packages(
+            "fmesher", 
+            repos = c(INLA = "https://inla.r-inla-download.org/R/stable"), 
+            type = "source"
+          )
+
+          # Install other missing deps from CRAN
+          install.packages(c("lifecycle","rlang","withr","MatrixModels"), repos = "https://cloud.r-project.org")
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
