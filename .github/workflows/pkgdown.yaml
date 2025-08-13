@@ -24,14 +24,23 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install INLA
+      - name: Cache R packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ hashFiles('DESCRIPTION', '.github/pkg.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-r-
+
+      - name: Install INLA and related dependencies
         run: |
           install.packages("INLA", repos = "https://inla.r-inla-download.org/R/stable")
+          install.packages(c("fmesher","lifecycle","rlang","withr","MatrixModels"), repos = "https://cloud.r-project.org")
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: pkgdown,fmesher,lifecycle,rlang,withr,MatrixModels
+          extra-packages: pkgdown
 
       - name: Configure git
         run: |
@@ -39,8 +48,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Build site
-        run: |
-          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
       - name: Deploy to GitHub Pages
