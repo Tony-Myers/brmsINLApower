@@ -23,38 +23,18 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
-
-      - name: Cache R packages
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ hashFiles('DESCRIPTION', '.github/pkg.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-r-
-
-      - name: Install INLA and related dependencies (pinned versions)
-        run: |
-          # Pin known-working version of INLA
-          install.packages(
-            "INLA", 
-            repos = c(INLA = "https://inla.r-inla-download.org/R/stable"), 
-            type = "source"
-          )
-          
-          # Pin fmesher from INLA repo (matching INLA version)
-          install.packages(
-            "fmesher", 
-            repos = c(INLA = "https://inla.r-inla-download.org/R/stable"), 
-            type = "source"
-          )
-
-          # Install other missing deps from CRAN
-          install.packages(c("lifecycle","rlang","withr","MatrixModels"), repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
+          # Add INLA's CRAN-like repository alongside CRAN/RSPM
+          extra-repositories: |
+            https://inla.r-inla-download.org/R/stable
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: pkgdown
+          # Install pkgdown explicitly and INLA from the extra repo
+          extra-packages: |
+            any::pkgdown
+            INLA
+          # This will install web-related deps if declared in DESCRIPTION
+          needs: website
 
       - name: Configure git
         run: |
