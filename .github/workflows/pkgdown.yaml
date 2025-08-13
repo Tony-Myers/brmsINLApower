@@ -2,8 +2,7 @@ name: pkgdown
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,17 +22,17 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
-          # Add INLA's CRAN-like repository alongside CRAN/RSPM
+          # Make the INLA repository visible alongside CRAN/RSPM
           extra-repositories: |
             https://inla.r-inla-download.org/R/stable
 
+      # Install dependencies + your local package
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          # Install pkgdown explicitly and INLA from the extra repo
           extra-packages: |
             any::pkgdown
+            local::.
             INLA
-          # This will install web-related deps if declared in DESCRIPTION
           needs: website
 
       - name: Configure git
@@ -42,7 +41,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: |
+          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
       - name: Deploy to GitHub Pages
