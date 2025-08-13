@@ -38,13 +38,24 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install INLA
+        run: |
+          install.packages("INLA", repos = "https://inla.r-inla-download.org/R/stable")
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: pkgdown
-          needs: website
+          # Remove `needs: website` if you have no job named website
+
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: |
+          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
       - name: Deploy to GitHub Pages
@@ -52,4 +63,3 @@ jobs:
         with:
           branch: gh-pages
           folder: docs
-
