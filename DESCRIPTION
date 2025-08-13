@@ -24,7 +24,9 @@ Imports:
     tibble,
     scales,
     rlang,
+    withr,
     magrittr,
+    MatrixModels,
     MASS,
     INLA
 Suggests:
